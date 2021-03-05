@@ -20,13 +20,24 @@ class Phishing:
 
         self.X = X[perm_idx] # shape = (11055,68)
         self.y = y[perm_idx] # shape = (11055,)
-
         self.n, self.p = X.shape
         self.sigma2 = 100
 
-    def batch_loss(self, sample_idx, theta):
-        X_sample = self.X[sample_idx,]
-        y_sample = self.y[sample_idx,]
+        # get training and testing
+        self.n_train = int(self.n * 0.8)
+        self.n_test = self.n - self.n_train
 
-        result = np.mean((1 - np.exp(-np.square(y_sample - X_sample.dot(theta)) / self.sigma2)) * self.sigma2 / 2)
-        return result
+        self.X_train = self.X[:self.n_train, ]
+        self.y_train = self.y[:self.n_train]
+
+        self.X_test = self.X[self.n_train:, ]
+        self.y_test = self.y[self.n_train:]
+
+    def entropy_loss(self, X, y, theta):
+        return np.mean((1 - np.exp(-np.square(y - X.dot(theta)) / self.sigma2)) * self.sigma2 / 2)
+
+    def train_loss(self, sample_idx, theta):
+        return self.entropy_loss(self.X_train[sample_idx,], self.y_train[sample_idx,], theta)
+
+    def test_loss(self, sample_idx, theta):
+        return self.entropy_loss(self.X_test[sample_idx,], self.y_test[sample_idx,], theta)
