@@ -11,7 +11,7 @@ class OptiAlgo(object):
     def __init__(self, a=0, A=0, alpha=0.602, c=0, gamma=0.101,
                  iter_num=1, dir_num=1, rep_num=1,
                  theta_0=None, loss_true=None, loss_noisy=None,
-                 record_theta_flag=False, record_loss_flag=True):
+                 record_theta_flag=True, record_loss_flag=True):
 
         # step size: a_k = a / (k+1+A) ** alpha
         # perturbation size: c_k = c / (k+1) ** gamma
@@ -50,5 +50,5 @@ class OptiAlgo(object):
             self.loss_ks[iter_idx,rep_idx] = self.loss_true(theta_k)
 
     def show_result(self, iter_idx, rep_idx):
-        if self.record_loss_flag and divmod(iter_idx, 100)[1] == 0:
-            print("iter:", iter_idx, "loss:", self.loss_k_all[iter_idx,rep_idx])
+        if self.record_loss_flag and divmod(iter_idx+1, 100)[1] == 0:
+            print("iter:", iter_idx+1, "loss:", self.loss_ks[iter_idx,rep_idx])

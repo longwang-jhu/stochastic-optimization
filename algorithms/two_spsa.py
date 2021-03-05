@@ -58,7 +58,8 @@ class TwoSPSA(OptiAlgo):
         Hbar_k = (1 - w_k) * self.H_k + w_k * Hhat_k
 
         Hbar_k_eig, Hbar_k_vec = linalg.eigh(Hbar_k)
-        Hbar_k_eig = np.maximum(1e-6, np.absolute(Hbar_k_eig)) # make it PD
+        Hbar_k_eig = np.maximum(1e-4, np.absolute(Hbar_k_eig)) # make it PD
+        # Hbar_k_eig = np.maximum(1e-4, Hbar_k_eig)
         Hbarbar_k = Hbar_k_vec.dot(np.diag(Hbar_k_eig)).dot(Hbar_k_vec.T)
         self.H_k = Hbarbar_k
 
@@ -77,6 +78,5 @@ class TwoSPSA(OptiAlgo):
 
                 # record result
                 self.record_result(iter_idx, rep_idx, theta_k)
-
                 # show result
                 self.show_result(iter_idx, rep_idx)
