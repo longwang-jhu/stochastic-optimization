@@ -9,7 +9,7 @@ Created on Sun Jul 19 16:41:02 2020
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import date
-from utility.norm_error import *
+from utility import norm_error
 
 # import algorithms
 from algorithms.spsa import SPSA
@@ -28,21 +28,19 @@ n = 4; m = 3
 x_0 = 20 * np.array([1, 2, -1, -0.5]).reshape(n,1)
 
 LQR_model = LQR(p=p, T=T, x_0=x_0)
-
-def loss_true(K):
-    return LQR_model.compute_cost(K)
-
-def loss_noisy(K):
-    return LQR_model.compute_cost_noisy(K)
-
 K_star = np.array([
     [1.60233232e-01, -1.36227805e-01, -9.93576677e-02, -4.28244630e-02],
     [7.47596033e-02,  9.05753832e-02,  7.46951286e-02, -1.53947620e-01],
     [3.65372978e-01, -2.59862175e-04,  5.91522023e-02, 8.25660846e-01]])
-
 theta_star = K_star.flatten()
 # loss_star = loss_true(theta_star)
 loss_star = 4149.38952236
+
+def loss_true(theta):
+    return LQR_model.compute_cost(theta)
+
+def loss_noisy(theta):
+    return LQR_model.compute_cost_noisy(theta)
 
 # inital value
 K_0 = np.ones(K_star.shape) * 1
@@ -61,7 +59,7 @@ TwoSPSA_solver = TwoSPSA(a=0.005, A=100, alpha=alpha, c=0.5, gamma=gamma, w=0.5,
                     theta_0=theta_0, loss_true=loss_true, loss_noisy=loss_noisy,
                     record_theta_flag=False)
 TwoSPSA_solver.train()
-TwoSPSA_loss_error = get_norm_loss_error(TwoSPSA_solver.loss_ks, loss_0, loss_star)
+TwoSPSA_loss_error = norm_error.get_norm_loss_error(TwoSPSA_solver.loss_ks, loss_0, loss_star)
 plt.figure(); plt.grid()
 plt.plot(TwoSPSA_loss_error, 'k-')
 
@@ -71,7 +69,7 @@ SPSA_solver = SPSA(a=a, c=c, A=A, alpha=alpha, gamma=gamma,
                     theta_0=theta_0, loss_true=loss_true, loss_noisy=loss_noisy,
                     record_theta_flag=False)
 # SPSA_solver.train()
-# SPSA_loss_error = get_norm_loss_error(SPSA_solver.loss_ks, loss_0, loss_star)
+# SPSA_loss_error = norm_error.get_norm_loss_error(SPSA_solver.loss_ks, loss_0, loss_star)
 # plt.figure(); plt.grid()
 # plt.plot(SPSA_loss_error, 'k-')
 # with open('data/LQR-SPSA-' + str(today) + '.npy', 'wb') as f:
@@ -83,7 +81,7 @@ CsSPSA_solver = CsSPSA(a=a, c=c, A=A, alpha=alpha, gamma=gamma,
                        theta_0=theta_0, loss_true=loss_true, loss_noisy=loss_noisy,
                        record_theta_flag=False)
 # CsSPSA_solver.train()
-# CsSPSA_loss_error = get_norm_loss_error(CsSPSA_solver.loss_ks, loss_0, loss_star)
+# CsSPSA_loss_error = norm_error.get_norm_loss_error(CsSPSA_solver.loss_ks, loss_0, loss_star)
 # plt.figure(); plt.grid()
 # plt.plot(CsSPSA_loss_error, 'k-')
 # with open('data/LQR-CsSPSA-' + str(today) + '.npy', 'wb') as f:

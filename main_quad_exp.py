@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import date
-from utility.norm_error import *
+from utility import norm_error
 
 from algorithms.fdsa import FDSA
 from algorithms.spsa import SPSA
@@ -69,17 +69,17 @@ CsSPSA_solver.train()
 
 ### plot ###
 # FDSA
-FDSA_loss_error = get_norm_loss_error(FDSA_solver.loss_ks, loss_0, loss_star, 2*p)
-FDSA_theta_error = get_norm_theta_error(FDSA_solver.theta_ks, theta_0, theta_star, 2*p)
+FDSA_loss_error = norm_error.get_norm_loss_error(FDSA_solver.loss_ks, loss_0, loss_star, 2*p)
+FDSA_theta_error = norm_error.get_norm_theta_error(FDSA_solver.theta_ks, theta_0, theta_star, 2*p)
 # SPSA
-SPSA_loss_error = get_norm_loss_error(SPSA_solver.loss_ks, loss_0, loss_star, 2)
-SPSA_theta_error = get_norm_theta_error(SPSA_solver.theta_ks, theta_0, theta_star, 2)
+SPSA_loss_error = norm_error.get_norm_loss_error(SPSA_solver.loss_ks, loss_0, loss_star, 2)
+SPSA_theta_error = norm_error.get_norm_theta_error(SPSA_solver.theta_ks, theta_0, theta_star, 2)
 # CsFDSA
-CsFDSA_loss_error = get_norm_loss_error(CsFDSA_solver.loss_ks, loss_0, loss_star, p)
-CsFDSA_theta_error = get_norm_theta_error(CsFDSA_solver.theta_ks, theta_0, theta_star, p)
+CsFDSA_loss_error = norm_error.get_norm_loss_error(CsFDSA_solver.loss_ks, loss_0, loss_star, p)
+CsFDSA_theta_error = norm_error.get_norm_theta_error(CsFDSA_solver.theta_ks, theta_0, theta_star, p)
 # CsSPSA
-CsSPSA_loss_error = get_norm_loss_error(CsSPSA_solver.loss_ks, loss_0, loss_star, 1)
-CsSPSA_theta_error = get_norm_theta_error(CsSPSA_solver.theta_ks, theta_0, theta_star, 1)
+CsSPSA_loss_error = norm_error.get_norm_loss_error(CsSPSA_solver.loss_ks, loss_0, loss_star, 1)
+CsSPSA_theta_error = norm_error.get_norm_theta_error(CsSPSA_solver.theta_ks, theta_0, theta_star, 1)
 
 # plot loss error
 plt.figure(); plt.grid()
