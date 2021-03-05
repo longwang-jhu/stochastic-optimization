@@ -1,1 +1,1 @@
-# stochastic-optimization
+# Optimization
