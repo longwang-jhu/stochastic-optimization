@@ -26,7 +26,7 @@ class SPSA(OptiAlgo):
     def train(self):
         self.get_delta_all()
         for rep_idx in range(self.rep_num):
-            print("running rep_idx:", rep_idx+1, "/", self.rep_num)
+            print("running rep_idx:", rep_idx + 1, "/", self.rep_num)
             theta_k = self.theta_0.copy() # reset theta_k
             for iter_idx in range(self.iter_num):
                 a_k = self.a / (iter_idx + 1 + self.A) ** self.alpha
