@@ -33,11 +33,11 @@ loss_0 = quad_exp_model.loss_true(theta_0)
 # parameters
 a = 0.02; c = 0.2; A = 100
 alpha = 0.602; gamma = 0.151
-iter_num = 1000; rep_num = 20
+iter_num = 25000; rep_num = 5
 
 print("running FDSA")
 FDSA_solver = FDSA(a=a, c=c, A=A, alpha=alpha, gamma=gamma,
-                   iter_num=int(iter_num/(2*p)), rep_num=rep_num,
+                   iter_num=int(iter_num/p), rep_num=rep_num,
                    theta_0=theta_0, loss_true=loss_true, loss_noisy=loss_noisy)
 FDSA_solver.train()
 # loss_ks = np.mean(FDSA_solver.loss_ks, axis=1)
@@ -45,7 +45,7 @@ FDSA_solver.train()
 
 print("running SPSA")
 SPSA_solver = SPSA(a=a, c=c, A=A, alpha=alpha, gamma=gamma,
-                   iter_num=int(iter_num/2), rep_num=rep_num,
+                   iter_num=iter_num, rep_num=rep_num,
                    theta_0=theta_0, loss_true=loss_true, loss_noisy=loss_noisy)
 SPSA_solver.train()
 # loss_ks = np.mean(SPSA_solver.loss_ks, axis=1)
@@ -69,11 +69,11 @@ CsSPSA_solver.train()
 
 ### plot ###
 # FDSA
-FDSA_loss_error = norm_error.get_norm_loss_error(FDSA_solver.loss_ks, loss_0, loss_star, 2*p)
-FDSA_theta_error = norm_error.get_norm_theta_error(FDSA_solver.theta_ks, theta_0, theta_star, 2*p)
+FDSA_loss_error = norm_error.get_norm_loss_error(FDSA_solver.loss_ks, loss_0, loss_star, p)
+FDSA_theta_error = norm_error.get_norm_theta_error(FDSA_solver.theta_ks, theta_0, theta_star, p)
 # SPSA
-SPSA_loss_error = norm_error.get_norm_loss_error(SPSA_solver.loss_ks, loss_0, loss_star, 2)
-SPSA_theta_error = norm_error.get_norm_theta_error(SPSA_solver.theta_ks, theta_0, theta_star, 2)
+SPSA_loss_error = norm_error.get_norm_loss_error(SPSA_solver.loss_ks, loss_0, loss_star, 1)
+SPSA_theta_error = norm_error.get_norm_theta_error(SPSA_solver.theta_ks, theta_0, theta_star, 1)
 # CsFDSA
 CsFDSA_loss_error = norm_error.get_norm_loss_error(CsFDSA_solver.loss_ks, loss_0, loss_star, p)
 CsFDSA_theta_error = norm_error.get_norm_theta_error(CsFDSA_solver.theta_ks, theta_0, theta_star, p)
@@ -91,9 +91,9 @@ plt.plot(CsSPSA_loss_error, 'k-')
 plt.xlim(xmin=0, xmax=iter_num)
 plt.yscale("log")
 plt.legend(["FDSA", "CS-FDSA", "SPSA", "CS-SPSA"], loc="upper right")
-plt.xlabel("Number of Function Measurements")
+plt.xlabel("Normalized Number of Function Measurements")
 plt.ylabel("Normalized Errors in Loss Function")
-plt.savefig('figures/quad-exp-loss-p-' + str(p) + '-' + str(today) + '.pdf')
+plt.savefig('figures/quad-exp-loss-p' + str(p) + '-' + str(today) + '.pdf')
 
 # plot theta error
 plt.figure(); plt.grid()
@@ -105,8 +105,8 @@ plt.plot(CsSPSA_theta_error, 'k-')
 plt.xlim(xmin=0, xmax=iter_num)
 plt.yscale("log")
 plt.legend(["FDSA", "CS-FDSA", "SPSA", "CS-SPSA"], loc="upper right")
-plt.xlabel("Number of Function Measurements")
+plt.xlabel("Normalized Number of Function Measurements")
 plt.ylabel(r"Normalized Error in Estimation of $\mathbf{\theta}$")
-plt.savefig('figures/quad-exp-theta-p-' + str(p) + '-' + str(today) + '.pdf')
+plt.savefig('figures/quad-exp-theta-p' + str(p) + '-' + str(today) + '.pdf')
 
 print("finish plotting!")
